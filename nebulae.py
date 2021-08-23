@@ -2,7 +2,6 @@
 
 import json
 
-#entry = ""
 t = 0
 url = input("Paste a Mod URL to create an entry for: ")
 
@@ -24,8 +23,8 @@ while url != "":
 
 print("Successfully generated distribution index entries for",t,"mods!")
 del list(entry)[0]
-print(entry,"\n\n\n")
+#print(entry,"\n\n\n")
 entry = str(entry).replace("'","")
 entry = entry.replace(")", "")
-entry = entry.replace(";", "\n")
+entry = entry.replace(";", ",\n")
 print(entry.replace("(", "")[0:])
