@@ -6,7 +6,7 @@ I used and use it to add more mods to [AxolotlClient](https://github.com/moehrea
 # Usage
 
 - open a Command Line
-- navigate to the Directory 'nebula.py' is in
-- run 'python nebula.py'
+- navigate to the Directory 'nebulae.py' is in
+- run 'python nebulae.py'
 - copy your string into the distribution.json file
 - Have Fun!
