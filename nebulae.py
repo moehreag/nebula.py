@@ -27,7 +27,6 @@ while url != "":
 
     urllib.request.urlretrieve(url, name)
 
-    #hash = md5(name).hexdigest()
     hash = getHash(name)
     size = os.path.getsize(name)
     
