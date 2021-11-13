@@ -39,6 +39,11 @@ def mod():
             if entry != "":
                 print("Here's what you've got so far:\n \n”"+entry)
             quit
+        except URLError:
+            print("Please check your pasted URL!")
+            if entry != "":
+                print("Here's what you've got so far:\n \n”"+entry)
+            quit
 
         hash = getHash(name)
         size = os.path.getsize(name)
