@@ -22,15 +22,40 @@ def getHash(name):
 def mod():
 
     t = 0
+    req = True
 
     dir = input("Please provide Version ID: ")
 
     url = input("Paste a Mod URL to create an entry for: ")
 
+    req = input("Is the mod required? [Y/n]:")
+
+    if "n" in req or "N" in req:
+        req = False
+        defreq = input("Should the Mod be enabled by default? [Y/n]")
+        if "n" in defreq or "N" in defreq:
+            defreq = False
+        else:
+            defreq = True
+
+    else:
+        req = True
+        defreq = True
+
     while url != "":
 
         name = str(url.split("/")[-1])
         version = str(name.split("-")[-1])
+        ext = version.split(".")[-1]
+
+        i = 0
+        mv = ""
+
+        while version.split(".")[i] != ext:
+            mv += version.split(".")[i]
+            if version.split(".")[i+1] != ext:
+                mv += "."
+            i = i+1
 
         try:
             urllib.request.urlretrieve(url, name)
@@ -51,8 +76,12 @@ def mod():
         if t == 0:
             distr = str(json.dumps({
             "name": name,
-            "id": dir,
+            "id": dir+":"+name+":"+mv,
             "type": "Mod",
+            "required":{
+                "value":req,
+                "def":defreq,
+                },
             "artifact": {
                 "url": url,
                 "size": size,
