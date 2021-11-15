@@ -44,8 +44,15 @@ def mod():
 
     while url != "":
 
-        name = str(url.split("/")[-1])
-        version = str(name.split("-")[-1])
+        if "blob" in url:
+            entry = entry.replace("blob", "raw")
+
+        filename = str(url.split("/")[-1])
+        name = str(filename.split("-")[:-1])
+        name = str(name.replace("[", ""))
+        name = str(name.replace("]", ""))
+        name = str(name.replace("'",""))
+        version = str(filename.split("-")[-1])
         ext = version.split(".")[-1]
 
         i = 0
@@ -58,7 +65,7 @@ def mod():
             i = i+1
 
         try:
-            urllib.request.urlretrieve(url, name)
+            urllib.request.urlretrieve(url, filename)
         except ConnectionRefusedError:
             print("Please check your Internet connection!")
             if entry != "":
@@ -70,8 +77,8 @@ def mod():
                 print("Here's what you've got so far:\n \n”"+entry)
             quit
 
-        hash = getHash(name)
-        size = os.path.getsize(name)
+        hash = getHash(filename)
+        size = os.path.getsize(filename)
 
         if t == 0:
             distr = str(json.dumps({
@@ -86,36 +93,38 @@ def mod():
                 "url": url,
                 "size": size,
                 "MD5": hash,
-                "path": dir+"/" + name
+                "path": dir+"/" + filename
                 }
             }),)
             entry = distr
 
         else:
+
             distr = str(";"+json.dumps({
             "name": name,
-            "id": dir,
+            "id": dir+":"+name+":"+mv,
             "type": "Mod",
+            "required":{
+                "value":req,
+                "def":defreq,
+                },
             "artifact": {
                 "url": url,
                 "size": size,
                 "MD5": hash,
-                "path": dir+"/" + name
+                "path": dir+"/" + filename
                 }
             }),)
             entry = str(entry)+str(distr)
 
-        os.system("rm "+ name)
-        print("Added", name)
+        os.remove(filename)
+        print("Added", name, "with version", mv, "to", dir)
         url = input("\nPaste the next mod URL to create an entry for, \nor press enter to exit: ")
         t += 1
 
-    print("Successfully generated distribution index entries for",t,"mods in Version",dir+"!")
+    print("Successfully generated distribution index entries for",t,"mods in Version",dir+"!\n")
     del list(entry)[0]
     entry = str(entry).replace("'","")
-
-    if "blob" in entry:
-        entry = entry.replace("blob", "raw")
 
     entry = entry.replace(")", "")
     entry = entry.replace(";", ",\n")
@@ -123,9 +132,14 @@ def mod():
 
 def File():
 
+    dir = input("Please provide Version ID: ")
+
     url = input("Paste a File URL to create an entry for: ")
 
     while url != "":
+
+        if "blob" in url:
+            entry = entry.replace("blob", "raw")
 
         name = str(url.split("/")[-1])
         version = str(name.split("-")[-1])
@@ -138,13 +152,13 @@ def File():
         if t == 0:
             distr = str(json.dumps({
             "name": name,
-            "id": name,
+            "id": dir,
             "type": "File",
             "artifact": {
                 "url": url,
                 "size": size,
                 "MD5": hash,
-                "path": "config/" + name
+                "path": "config/" + filename
                 }
             }),)
             entry = distr
@@ -152,28 +166,25 @@ def File():
         else:
             distr = str(";"+json.dumps({
             "name": name,
-            "id": name,
+            "id": dir,
             "type": "File",
             "artifact": {
                 "url": url,
                 "size": size,
                 "MD5": hash,
-                "path": "config/" + name
+                "path": "config/" + filename
                 }
             }),)
             entry = str(entry)+str(distr)
 
-        os.system("rm "+ name)
+        os.remove(name)
         print("Added", name)
         url = input("\nPaste the next File URL to create an entry for, \nor press enter to exit: ")
         t += 1
 
-    print("Successfully generated distribution index entries for",t,"Files!")
+    print("Successfully generated distribution index entries for",t,"Files!\n")
     del list(entry)[0]
     entry = str(entry).replace("'","")
-
-    if "blob" in entry:
-        entry = entry.replace("blob", "raw")
 
     entry = entry.replace(")", "")
     entry = entry.replace(";", ",\n")
