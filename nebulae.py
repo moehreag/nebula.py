@@ -21,6 +21,8 @@ def getHash(name):
 
 def mod():
 
+    global entry
+
     t = 0
     req = True
 
@@ -32,15 +34,21 @@ def mod():
 
     if "n" in req or "N" in req:
         req = False
+        type = "File"
+        pth = "mods"
         defreq = input("Should the Mod be enabled by default? [Y/n]")
         if "n" in defreq or "N" in defreq:
             defreq = False
         else:
             defreq = True
+            type = "Mod"
+            pth = dir
 
     else:
         req = True
         defreq = True
+        type = "Mod"
+        pth = dir
 
     while url != "":
 
@@ -51,6 +59,8 @@ def mod():
         name = str(filename.split("-")[:-1])
         name = str(name.replace("[", ""))
         name = str(name.replace("]", ""))
+        if ", " in name:
+            name = name.replace(", ","-")
         name = str(name.replace("'",""))
         version = str(filename.split("-")[-1])
         ext = version.split(".")[-1]
@@ -71,7 +81,7 @@ def mod():
             if entry != "":
                 print("Here's what you've got so far:\n \n”"+entry)
             quit
-        except URLError:
+        except BaseException:
             print("Please check your pasted URL!")
             if entry != "":
                 print("Here's what you've got so far:\n \n”"+entry)
@@ -84,7 +94,7 @@ def mod():
             distr = str(json.dumps({
             "name": name,
             "id": dir+":"+name+":"+mv,
-            "type": "Mod",
+            "type": type,
             "required":{
                 "value":req,
                 "def":defreq,
@@ -93,7 +103,7 @@ def mod():
                 "url": url,
                 "size": size,
                 "MD5": hash,
-                "path": dir+"/" + filename
+                "path": pth+"/" + filename
                 }
             }),)
             entry = distr
@@ -103,7 +113,7 @@ def mod():
             distr = str(";"+json.dumps({
             "name": name,
             "id": dir+":"+name+":"+mv,
-            "type": "Mod",
+            "type": type,
             "required":{
                 "value":req,
                 "def":defreq,
@@ -112,7 +122,7 @@ def mod():
                 "url": url,
                 "size": size,
                 "MD5": hash,
-                "path": dir+"/" + filename
+                "path": pth+"/" + filename
                 }
             }),)
             entry = str(entry)+str(distr)
