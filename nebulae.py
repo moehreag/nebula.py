@@ -139,8 +139,11 @@ def mod():
     entry = entry.replace(")", "")
     entry = entry.replace(";", ",\n")
     print(entry.replace("(", "")[0:])
+    exit()
 
 def File():
+
+    t = 0
 
     dir = input("Please provide Version ID: ")
 
@@ -151,18 +154,41 @@ def File():
         if "blob" in url:
             entry = entry.replace("blob", "raw")
 
-        name = str(url.split("/")[-1])
-        version = str(name.split("-")[-1])
+        filename = str(url.split("/")[-1])
+        ext = str(filename.split(".")[:-1])
+        ext = str(ext.replace("[", ""))
+        ext = str(ext.replace("]", ""))
+        if ", " in ext:
+            ext = ext.replace(", ","-")
+        ext = str(ext.replace("'",""))
 
-        urllib.request.urlretrieve(url, name)
+        i = 0
+        name = ""
 
-        hash = getHash(name)
-        size = os.path.getsize(name)
+        while filename.split(".")[i] != ext:
+            name += filename.split(".")[i]
+            i = i+1
+
+        try:
+            urllib.request.urlretrieve(url, filename)
+        except ConnectionRefusedError:
+            print("Please check your Internet connection!")
+            if entry != "":
+                print("Here's what you've got so far:\n \n”"+entry)
+            quit
+        except BaseException:
+            print("Please check your pasted URL!")
+            if entry != "":
+                print("Here's what you've got so far:\n \n”"+entry)
+            quit
+
+        hash = getHash(filename)
+        size = os.path.getsize(filename)
 
         if t == 0:
             distr = str(json.dumps({
-            "name": name,
-            "id": dir,
+            "name": filename,
+            "id": dir+":config",
             "type": "File",
             "artifact": {
                 "url": url,
@@ -175,8 +201,8 @@ def File():
 
         else:
             distr = str(";"+json.dumps({
-            "name": name,
-            "id": dir,
+            "name": filename,
+            "id": dir+"config",
             "type": "File",
             "artifact": {
                 "url": url,
@@ -187,18 +213,19 @@ def File():
             }),)
             entry = str(entry)+str(distr)
 
-        os.remove(name)
-        print("Added", name)
+        os.remove(filename)
+        print("Added", filename)
         url = input("\nPaste the next File URL to create an entry for, \nor press enter to exit: ")
         t += 1
 
-    print("Successfully generated distribution index entries for",t,"Files!\n")
+    print("Successfully generated distribution index entries for",t,"File(s)\n")
     del list(entry)[0]
     entry = str(entry).replace("'","")
 
     entry = entry.replace(")", "")
     entry = entry.replace(";", ",\n")
     print(entry.replace("(", "")[0:])
+    exit()
 
 run = input("Type to generate: Mod (1) or (Config)File (2): ")
 if run == "2":
