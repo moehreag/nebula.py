@@ -79,12 +79,12 @@ def mod():
         except ConnectionRefusedError:
             print("Please check your Internet connection!")
             if entry != "":
-                print("Here's what you've got so far:\n \n”"+entry)
+                print("Here's what you've got so far:\n \n"+entry)
             quit
         except BaseException:
             print("Please check your pasted URL!")
             if entry != "":
-                print("Here's what you've got so far:\n \n”"+entry)
+                print("Here's what you've got so far:\n \n"+entry)
             quit
 
         hash = getHash(filename)
@@ -130,6 +130,25 @@ def mod():
         os.remove(filename)
         print("Added", name, "with version", mv, "to", dir)
         url = input("\nPaste the next mod URL to create an entry for, \nor press enter to exit: ")
+        req = input("Is the mod required? [Y/n]:")
+
+        if "n" in req or "N" in req:
+            req = False
+            type = "File"
+            pth = "mods"
+            defreq = input("Should the Mod be enabled by default? [Y/n]")
+            if "n" in defreq or "N" in defreq:
+                defreq = False
+            else:
+                defreq = True
+                type = "Mod"
+                pth = dir
+
+        else:
+            req = True
+            defreq = True
+            type = "Mod"
+            pth = dir
         t += 1
 
     print("Successfully generated distribution index entries for",t,"mods in Version",dir+"!\n")
@@ -174,12 +193,12 @@ def File():
         except ConnectionRefusedError:
             print("Please check your Internet connection!")
             if entry != "":
-                print("Here's what you've got so far:\n \n”"+entry)
+                print("Here's what you've got so far:\n \n"+entry)
             quit
         except BaseException:
             print("Please check your pasted URL!")
             if entry != "":
-                print("Here's what you've got so far:\n \n”"+entry)
+                print("Here's what you've got so far:\n \n"+entry)
             quit
 
         hash = getHash(filename)
