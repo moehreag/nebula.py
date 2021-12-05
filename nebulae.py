@@ -129,27 +129,30 @@ def mod():
 
         os.remove(filename)
         print("Added", name, "with version", mv, "to", dir)
+        t += 1
         url = input("\nPaste the next mod URL to create an entry for, \nor press enter to exit: ")
-        req = input("Is the mod required? [Y/n]:")
+        if url != "":
+            req = input("Is the mod required? [Y/n]:")
 
-        if "n" in req or "N" in req:
-            req = False
-            type = "File"
-            pth = "mods"
-            defreq = input("Should the Mod be enabled by default? [Y/n]")
-            if "n" in defreq or "N" in defreq:
-                defreq = False
+            if "n" in req or "N" in req:
+                req = False
+                type = "File"
+                pth = "mods"
+                defreq = input("Should the Mod be enabled by default? [Y/n]")
+                if "n" in defreq or "N" in defreq:
+                    defreq = False
+                else:
+                    defreq = True
+                    type = "Mod"
+                    pth = dir
+
             else:
+                req = True
                 defreq = True
                 type = "Mod"
                 pth = dir
-
         else:
-            req = True
-            defreq = True
-            type = "Mod"
-            pth = dir
-        t += 1
+            break
 
     print("Successfully generated distribution index entries for",t,"mods in Version",dir+"!\n")
     del list(entry)[0]
@@ -188,22 +191,6 @@ def File():
             name += filename.split(".")[i]
             i = i+1
 
-        try:
-            urllib.request.urlretrieve(url, filename)
-        except ConnectionRefusedError:
-            print("Please check your Internet connection!")
-            if entry != "":
-                print("Here's what you've got so far:\n \n"+entry)
-            quit
-        except BaseException:
-            print("Please check your pasted URL!")
-            if entry != "":
-                print("Here's what you've got so far:\n \n"+entry)
-            quit
-
-        hash = getHash(filename)
-        size = os.path.getsize(filename)
-
         if t == 0:
             distr = str(json.dumps({
             "name": filename,
@@ -211,8 +198,6 @@ def File():
             "type": "File",
             "artifact": {
                 "url": url,
-                "size": size,
-                "MD5": hash,
                 "path": "config/" + filename
                 }
             }),)
@@ -225,14 +210,11 @@ def File():
             "type": "File",
             "artifact": {
                 "url": url,
-                "size": size,
-                "MD5": hash,
                 "path": "config/" + filename
                 }
             }),)
             entry = str(entry)+str(distr)
 
-        os.remove(filename)
         print("Added", filename)
         url = input("\nPaste the next File URL to create an entry for, \nor press enter to exit: ")
         t += 1
