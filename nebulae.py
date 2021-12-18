@@ -90,6 +90,11 @@ def mod():
         hash = getHash(filename)
         size = os.path.getsize(filename)
 
+        if req == True:
+            reqpth = "required"
+        else:
+            reqpth = "optional"
+
         if t == 0:
             distr = str(json.dumps({
             "name": name,
@@ -103,7 +108,7 @@ def mod():
                 "url": url,
                 "size": size,
                 "MD5": hash,
-                "path": pth+"/" + filename
+                "path": pth+"/" + reqpth + "/" + filename
                 }
             }),)
             entry = distr
@@ -122,7 +127,7 @@ def mod():
                 "url": url,
                 "size": size,
                 "MD5": hash,
-                "path": pth+"/" + filename
+                "path": pth+"/" + reqpth + "/" + filename
                 }
             }),)
             entry = str(entry)+str(distr)
