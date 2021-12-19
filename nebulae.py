@@ -34,7 +34,7 @@ def mod():
 
     if "n" in req or "N" in req:
         req = False
-        type = "File"
+        type = "Mod"
         pth = "mods"
         defreq = input("Should the Mod be enabled by default? [Y/n]")
         if "n" in defreq or "N" in defreq:
@@ -56,13 +56,15 @@ def mod():
             entry = entry.replace("blob", "raw")
 
         filename = str(url.split("/")[-1])
-        name = str(filename.split("-")[:-1])
+        name = filename.split("-")[0]
+        #name = str(filename.split("-")[:-1])
         name = str(name.replace("[", ""))
         name = str(name.replace("]", ""))
         if ", " in name:
             name = name.replace(", ","-")
         name = str(name.replace("'",""))
-        version = str(filename.split("-")[-1])
+        version = filename.split("-")[1:]
+        version = "-".join(version)
         ext = version.split(".")[-1]
 
         i = 0
