@@ -35,20 +35,17 @@ def mod():
     if "n" in req or "N" in req:
         req = False
         type = "Mod"
-        pth = "mods"
         defreq = input("Should the Mod be enabled by default? [Y/n]")
         if "n" in defreq or "N" in defreq:
             defreq = False
         else:
             defreq = True
             type = "Mod"
-            pth = dir
 
     else:
         req = True
         defreq = True
         type = "Mod"
-        pth = dir
 
     while url != "":
 
@@ -110,7 +107,7 @@ def mod():
                 "url": url,
                 "size": size,
                 "MD5": hash,
-                "path": pth+"/" + reqpth + "/" + filename
+                "path": dir+"/" + reqpth + "/" + filename
                 }
             }),)
             entry = distr
@@ -129,7 +126,7 @@ def mod():
                 "url": url,
                 "size": size,
                 "MD5": hash,
-                "path": pth+"/" + reqpth + "/" + filename
+                "path": dir+"/" + reqpth + "/" + filename
                 }
             }),)
             entry = str(entry)+str(distr)
