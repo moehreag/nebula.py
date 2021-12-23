@@ -30,12 +30,12 @@ def mod():
 
     url = input("Paste a Mod URL to create an entry for: ")
 
-    req = input("Is the mod required? [Y/n]:")
+    req = input("Is the mod required? [Y/n]: ")
 
     if "n" in req or "N" in req:
         req = False
         type = "Mod"
-        defreq = input("Should the Mod be enabled by default? [Y/n]")
+        defreq = input("Should the Mod be enabled by default? [Y/n]: ")
         if "n" in defreq or "N" in defreq:
             defreq = False
         else:
@@ -136,13 +136,13 @@ def mod():
         t += 1
         url = input("\nPaste the next mod URL to create an entry for, \nor press enter to exit: ")
         if url != "":
-            req = input("Is the mod required? [Y/n]:")
+            req = input("Is the mod required? [Y/n]: ")
 
             if "n" in req or "N" in req:
                 req = False
                 type = "File"
                 pth = "mods"
-                defreq = input("Should the Mod be enabled by default? [Y/n]")
+                defreq = input("Should the Mod be enabled by default? [Y/n]: ")
                 if "n" in defreq or "N" in defreq:
                     defreq = False
                 else:
