@@ -232,7 +232,7 @@ def File():
     print(entry.replace("(", "")[0:])
     exit()
 
-run = input("Type to generate: Mod (1) or (Config)File (2): ")
+run = input("Type 1 to generate Mod entries, \n  or 2 for (Config-)Files: ")
 if run == "2":
     File()
 if run == "1":
