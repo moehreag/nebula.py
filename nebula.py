@@ -140,7 +140,7 @@ def mod():
 
             if "n" in req or "N" in req:
                 req = False
-                type = "File"
+                type = "Mod"
                 pth = "mods"
                 defreq = input("Should the Mod be enabled by default? [Y/n]: ")
                 if "n" in defreq or "N" in defreq:
