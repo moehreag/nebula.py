@@ -3,6 +3,7 @@
 import json
 import hashlib
 import urllib.request
+import requests
 import os
 
 t = 0
@@ -51,6 +52,8 @@ def mod():
 
         if "blob" in url:
             entry = entry.replace("blob", "raw")
+        if "cdn.modrinth.com" in url:
+            url = url.replace("cdn.modrinth", "cdn-raw.modrinth")
 
         filename = str(url.split("/")[-1])
         name = filename.split("-")[0]
@@ -74,7 +77,9 @@ def mod():
             i = i+1
 
         try:
-            urllib.request.urlretrieve(url, filename)
+             r = requests.get(url)
+             with open(filename, 'wb') as f:
+                 f.write(r.content)
         except ConnectionRefusedError:
             print("Please check your Internet connection!")
             if entry != "":
